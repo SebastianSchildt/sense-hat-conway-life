@@ -1,5 +1,5 @@
 from itertools import product
-from random import choice
+from random import choice,randrange
 from time import sleep
 from sense_hat import SenseHat
 
@@ -9,6 +9,7 @@ sense = SenseHat()
 class GameOfLife(object):
     def __init__(self, width, height):
         self.size = (width, height)
+	self.random_colour()
         self.random_world()
 
     def __str__(self):
@@ -49,6 +50,9 @@ class GameOfLife(object):
         width, height = self.size
         world = product(range(width), range(height))
         self.live_cells = {cell for cell in world if choice([0, 1])}
+	
+    def random_colour(self):
+	self.colour=(randrange(255), randrange(255), randrange(255))
 
     def draw_cell(self, x, y):
         cell = (x, y)
@@ -56,9 +60,8 @@ class GameOfLife(object):
 
     def get_cell_color(self, x, y):
         cell = (x, y)
-        red = (255, 0, 0)
         black = (0, 0, 0)
-        return red if cell in self.live_cells else black
+        return self.colour if cell in self.live_cells else black
 
     def update(self):
         width, height = self.size
@@ -67,12 +70,35 @@ class GameOfLife(object):
                 color = self.get_cell_color(x, y)
                 sense.set_pixel(x, y, color)
 
+    def count_cells(self):
+	count=0
+	width, height = self.size
+	for x in range(width):
+	    for y in range(height):
+		if (x,y) in self.live_cells:
+		    count=count+1
+	return count
 
 def main():
     game = GameOfLife(8, 8)
+    oldcount=0
+    boredom=0
+
     for i in game:
         game.update()
-        sleep(0.1)
+	newcount=game.count_cells()
+
+        if newcount==oldcount:
+	    boredom=boredom+1
+
+	if newcount==0 or boredom>10:
+	    sleep(2)
+	    game.random_world()
+	    game.random_colour()
+	    boredom=0
+
+        oldcount=newcount
+	sleep(0.25)
 
 if __name__ == '__main__':
     main()
