@@ -3,7 +3,6 @@ from random import choice,randrange
 from time import sleep
 from sense_hat import SenseHat
 
-
 sense = SenseHat()
 
 class GameOfLife(object):
@@ -87,8 +86,9 @@ def main():
     for i in game:
         game.update()
 	newcount=game.count_cells()
+        boredom+=0.01 # Get bored after 1000 generations, even if oscillatory steady state
 
-        if newcount==oldcount:
+        if newcount==oldcount: # Steady-state
 	    boredom=boredom+1
 
 	if newcount==0 or boredom>10:
