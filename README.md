@@ -2,6 +2,11 @@
 
 Example programs using the Sense HAT - particularly for the Astro Pi competition
 
+Now re-written to be more suitable as a 'screensaver' / art object.
+
+[![Conway's game of life](https://img.youtube.com/vi/Q184KpZQ_Ls/0.jpg)](https://www.youtube.com/watch?v=Q184KpZQ_Ls)
+ - Click above to play [Youtube video](https://www.youtube.com/watch?v=Q184KpZQ_Ls)
+
 ### Conway's Game of Life
 
 [Conway's Game of Life](https://en.wikipedia.org/wiki/Conway's_Game_of_Life) is a zero-player cellular automaton game
