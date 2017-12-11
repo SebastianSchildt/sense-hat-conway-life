@@ -80,7 +80,7 @@ class GameOfLife(object):
         return count
 
 def messageOfTheMoment(col):
-    output = check_output(["fortune", "-n", "60", "-s"])
+    output = check_output(["/usr/games/fortune", "-n", "60", "-s"])
     print(str(output,'utf-8')[:-1].replace('\n',' // '))
     sense.show_message(str(output,'utf-8')[:-1].replace('\n',' // '),text_colour=col)
     
