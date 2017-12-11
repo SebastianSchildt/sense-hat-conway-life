@@ -2,13 +2,14 @@ from itertools import product
 from random import choice,randrange
 from time import sleep
 from sense_hat import SenseHat
+from subprocess import *
 
 sense = SenseHat()
 
 class GameOfLife(object):
     def __init__(self, width, height):
         self.size = (width, height)
-	self.random_colour()
+        self.random_colour()
         self.random_world()
 
     def __str__(self):
@@ -49,9 +50,9 @@ class GameOfLife(object):
         width, height = self.size
         world = product(range(width), range(height))
         self.live_cells = {cell for cell in world if choice([0, 1])}
-	
+    
     def random_colour(self):
-	self.colour=(randrange(255), randrange(255), randrange(255))
+        self.colour=(randrange(255), randrange(255), randrange(255))
 
     def draw_cell(self, x, y):
         cell = (x, y)
@@ -70,35 +71,44 @@ class GameOfLife(object):
                 sense.set_pixel(x, y, color)
 
     def count_cells(self):
-	count=0
-	width, height = self.size
-	for x in range(width):
-	    for y in range(height):
-		if (x,y) in self.live_cells:
-		    count=count+1
-	return count
+        count=0
+        width, height = self.size
+        for x in range(width):
+            for y in range(height):
+                if (x,y) in self.live_cells:
+                    count=count+1
+        return count
 
+def messageOfTheMoment(col):
+    output = check_output(["fortune", "-n", "60", "-s"])
+    print(str(output,'utf-8')[:-1].replace('\n',' // '))
+    sense.show_message(str(output,'utf-8')[:-1].replace('\n',' // '),text_colour=col)
+    
 def main():
+    sense.set_rotation(180)
     game = GameOfLife(8, 8)
     oldcount=0
     boredom=0
+    
+    messageOfTheMoment(game.colour)
 
     for i in game:
         game.update()
-	newcount=game.count_cells()
+        newcount=game.count_cells()
         boredom+=0.01 # Get bored after 1000 generations, even if oscillatory steady state
 
         if newcount==oldcount: # Steady-state
-	    boredom=boredom+1
+            boredom=boredom+1
 
-	if newcount==0 or boredom>10:
-	    sleep(2)
-	    game.random_world()
-	    game.random_colour()
-	    boredom=0
+        if newcount==0 or boredom>10:
+            sleep(2)
+            game.random_world()
+            game.random_colour()
+            messageOfTheMoment(game.colour)
+            boredom=0
 
         oldcount=newcount
-	sleep(0.25)
+        sleep(0.25)
 
 if __name__ == '__main__':
     main()
