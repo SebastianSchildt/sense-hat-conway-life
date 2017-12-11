@@ -1,0 +1,13 @@
+[Unit]
+Description=SenseHat display stuff
+After=multisuer.target
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=/home/pi/sense-hat-conway-life
+ExecStart=/usr/bin/python3 -u ./conway.py
+Restart=on-abort
+
+[Install]
+WantedBy=multi-user.target
